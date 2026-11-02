@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SSG HOSPITAL | Hospital Operations</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand-block">
+          <div class="brand-mark">S</div>
+          <div>
+            <p class="eyebrow">Clinical operations</p>
+            <h1>SSG HOSPITAL</h1>
+          </div>
+        </div>
+
+        <div class="topbar-meta">
+          <span class="date-chip">Tue, 29 Sep 2026</span>
+          <span class="status-pill"><span class="status-dot"></span><span id="systemStatus">Live system</span></span>
+        </div>
+      </div>
+    </header>
+
+    <div id="demoNotice" class="demo-notice" role="note" hidden></div>
+
+    <div class="workspace-shell">
+      <aside class="sidebar" aria-label="Workspace navigation">
+        <p class="sidebar-label">Workspace</p>
+        <nav class="side-nav">
+          <a class="nav-link active" href="#overview"><span>01</span>Overview</a>
+          <a class="nav-link" href="#admissions"><span>02</span>Patient flow</a>
+          <a class="nav-link" href="#capacity"><span>03</span>Capacity</a>
+          <a class="nav-link" href="#records"><span>04</span>Records</a>
+          <a class="nav-link" href="#inventory"><span>05</span>Inventory</a>
+        </nav>
+        <div class="sidebar-footer">
+          <span class="sidebar-indicator"></span>
+          <div><strong>SSG Hospital</strong><span>Operations active</span></div>
+        </div>
+      </aside>
+
+      <main class="container">
+        <section class="overview-hero" id="overview">
+          <div class="hero-copy">
+            <p class="section-kicker">Tuesday / 29 September 2026</p>
+            <h2>Care operations</h2>
+            <p class="hero-description">A live view of patient flow, staffing, and critical supplies.</p>
+          </div>
+          <div class="hero-actions">
+            <div class="hero-stat">
+              <span>Current load</span>
+              <strong id="heroLoad">Stable</strong>
+            </div>
+            <a class="hero-button" href="#admissions">+ New admission</a>
+          </div>
+        </section>
+
+        <section class="metrics" id="overviewCards" aria-label="Hospital metrics"></section>
+
+        <section class="section-block" id="admissions">
+          <div class="section-heading">
+            <div><p class="section-kicker">Patient flow</p><h2>Admissions & visits</h2></div>
+            <span class="section-note">Intake and scheduled care</span>
+          </div>
+          <div class="panel-grid">
+            <article class="panel panel-featured">
+              <div class="panel-heading"><span class="panel-mark">01</span><h3>Emergency admission</h3></div>
+              <form id="admitForm">
+                <label>
+                  Patient name
+                  <input type="text" name="name" placeholder="Example: Aisha Patel" required />
+                </label>
+                <div class="form-row">
+                  <label>
+                    Age
+                    <input type="number" name="age" min="0" max="120" required />
+                  </label>
+                  <label>
+                    Acuity
+                    <select name="acuity">
+                      <option value="1">1 - Stable</option>
+                      <option value="2">2 - Moderate</option>
+                      <option value="3">3 - Serious</option>
+                      <option value="4">4 - Critical</option>
+                      <option value="5">5 - Life-threatening</option>
+                    </select>
+                  </label>
+                </div>
+                <button type="submit">Admit patient <span aria-hidden="true">&rarr;</span></button>
+              </form>
+            </article>
+
+            <article class="panel">
+              <div class="panel-heading"><span class="panel-mark panel-mark--blue">02</span><h3>Schedule appointment</h3></div>
+              <form id="appointmentForm">
+                <label>
+                  Patient name
+                  <input type="text" name="patientName" placeholder="Example: Malik Jones" required />
+                </label>
+                <div class="form-row">
+                  <label>
+                    Specialty
+                    <select name="specialty">
+                      <option value="General">General</option>
+                      <option value="Critical Care">Critical Care</option>
+                    </select>
+                  </label>
+                  <label>
+                    Date & time
+                    <input type="datetime-local" name="time" required />
+                  </label>
+                </div>
+                <button class="button-secondary" type="submit">Book visit <span aria-hidden="true">&rarr;</span></button>
+              </form>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-block" id="capacity">
+          <div class="section-heading">
+            <div><p class="section-kicker">Available resources</p><h2>Capacity & staffing</h2></div>
+            <span class="section-note">Live assignments</span>
+          </div>
+          <div class="panel-grid">
+            <article class="panel">
+              <div class="panel-heading"><span class="panel-mark panel-mark--green">03</span><h3>Bed availability</h3></div>
+              <div id="bedBoard" class="list-box"></div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-heading"><span class="panel-mark panel-mark--coral">04</span><h3>Doctor availability</h3></div>
+              <div id="doctorBoard" class="list-box"></div>
+            </article>
+          </div>
+          <article class="panel utility-panel">
+            <div class="panel-heading"><span class="panel-mark panel-mark--coral">05</span><h3>Discharge patient</h3></div>
+            <form id="dischargeForm" class="inline-form">
+              <label>
+                Patient ID
+                <input type="number" name="patientId" min="1" placeholder="Enter patient ID" required />
+              </label>
+              <button type="submit">Discharge <span aria-hidden="true">&rarr;</span></button>
+            </form>
+          </article>
+        </section>
+
+        <section class="section-block" id="records">
+          <div class="section-heading">
+            <div><p class="section-kicker">Patient services</p><h2>Records & schedule</h2></div>
+            <span class="section-note">Current and upcoming care</span>
+          </div>
+          <div class="panel-grid">
+            <article class="panel">
+              <div class="panel-heading"><span class="panel-mark panel-mark--blue">06</span><h3>Patient records</h3></div>
+              <div id="patientBoard" class="list-box"></div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-heading"><span class="panel-mark panel-mark--green">07</span><h3>Appointment schedule</h3></div>
+              <div class="now-calling" role="status" aria-live="polite">
+                <strong>Now calling</strong>
+                <div id="nowCalling">Checking appointment queue...</div>
+              </div>
+              <div id="appointmentBoard" class="list-box"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-block" id="inventory">
+          <div class="section-heading">
+            <div><p class="section-kicker">Supply watch</p><h2>Inventory</h2></div>
+            <span class="section-note">On-hand quantities</span>
+          </div>
+          <article class="panel utility-panel inventory-update">
+            <div class="panel-heading"><span class="panel-mark panel-mark--blue">08</span><h3>Update stock</h3></div>
+            <form id="inventoryForm" class="inline-form">
+              <label>
+                Inventory type
+                <select name="type">
+                  <option value="blood">Blood</option>
+                  <option value="medicine">Medicine</option>
+                </select>
+              </label>
+              <label>
+                Item name
+                <select name="name" required>
+                  <option value="" selected disabled>Select an item</option>
+                </select>
+              </label>
+              <label>
+                Quantity change
+                <input type="number" name="change" placeholder="-5 or 25" step="1" required />
+              </label>
+              <button type="submit">Update stock <span aria-hidden="true">&rarr;</span></button>
+            </form>
+          </article>
+          <div class="panel-grid inventory-grid">
+            <article class="panel">
+              <div class="panel-heading"><span class="panel-mark panel-mark--coral">09</span><h3>Blood inventory</h3></div>
+              <div id="bloodBoard" class="list-box inventory-list"></div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-heading"><span class="panel-mark panel-mark--green">10</span><h3>Medicine inventory</h3></div>
+              <div id="medicineBoard" class="list-box inventory-list"></div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="toast" class="toast" aria-live="polite"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
