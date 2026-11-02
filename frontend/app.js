@@ -12,6 +12,7 @@ const inventoryForm = document.getElementById('inventoryForm');
 const inventoryTypeSelect = inventoryForm.elements.type;
 const inventoryNameSelect = inventoryForm.elements.name;
 const apiBaseUrl = (window.HOSPITAL_API_BASE_URL || '').replace(/\/+$/, '');
+const staticDemo = window.HOSPITAL_STATIC_DEMO === true;
 const inventoryItemsByType = { blood: [], medicine: [] };
 let currentDoctors = [];
 let dashboardLoadInProgress = false;
@@ -281,7 +282,7 @@ async function loadDashboard() {
   dashboardLoadInProgress = true;
 
   try {
-    const data = await fetchJson('/api/overview');
+    const data = staticDemo ? window.HOSPITAL_STATIC_DATA : await fetchJson('/api/overview');
     currentDoctors = data.doctors;
     inventoryItemsByType.blood = data.inventory.blood;
     inventoryItemsByType.medicine = data.inventory.medicine;
@@ -302,6 +303,16 @@ async function loadDashboard() {
 }
 
 async function initialize() {
+  if (staticDemo) {
+    document.body.classList.add('public-demo', 'public-demo-readonly');
+    const demoNotice = document.getElementById('demoNotice');
+    demoNotice.textContent = 'Static public demo — fictional sample data only. Changes are disabled and are not saved. Never enter real patient or sensitive information.';
+    demoNotice.hidden = false;
+    document.getElementById('systemStatus').textContent = 'Static demo';
+    await loadDashboard();
+    return;
+  }
+
   try {
     const config = await fetchJson('/api/config');
     if (config.publicDemo) {
@@ -446,4 +457,6 @@ document.getElementById('inventoryForm').addEventListener('submit', async (event
 });
 
 initialize();
-setInterval(loadDashboard, 5000);
+if (!staticDemo) {
+  setInterval(loadDashboard, 5000);
+}

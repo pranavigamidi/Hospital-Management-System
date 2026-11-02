@@ -18,7 +18,13 @@ The backend creates `backend/data/hospital.json` on its first run. Patient admis
 
 ## Publish a public website
 
-The website can be published at `https://pranavigamidi.github.io/Hospital-Management-System/` using GitHub Pages. The interactive dashboard also needs the Node.js backend and shared Supabase storage; GitHub Pages alone cannot run the API.
+The website is published at `https://pranavigamidi.github.io/Hospital-Management-System/` using GitHub Pages. Without a backend URL, it runs as a read-only static demo with fictional sample data; changes are disabled and are not saved. GitHub Pages alone cannot run the Node.js API.
+
+Pushing to `main` automatically deploys the static website. In **Settings → Pages**, choose **GitHub Actions** as the build and deployment source.
+
+### Optional interactive backend
+
+To enable live data and updates, deploy the API and configure its URL:
 
 1. Create a Supabase project and run `backend/supabase-schema.sql` in its SQL editor.
 2. In Render, create a Node.js web service from this repository. Set the root directory to `backend` and the start command to `npm start`.
@@ -29,9 +35,9 @@ The website can be published at `https://pranavigamidi.github.io/Hospital-Manage
    - `SUPABASE_SERVICE_ROLE_KEY` — the service-role key; keep it private in Render and never add it to GitHub or frontend code.
 4. Deploy the Render service and copy its HTTPS service URL.
 5. In the GitHub repository, open **Settings → Secrets and variables → Actions → Variables** and add `HOSPITAL_API_BASE_URL` with the Render HTTPS URL (for example, `https://your-service.onrender.com`, without a path).
-6. Open **Settings → Pages**, choose **GitHub Actions** as the build and deployment source, then push to `main` or run the **Deploy website to GitHub Pages** workflow.
+6. Push to `main` or run the **Deploy website to GitHub Pages** workflow. When the API URL is configured, the site uses the interactive backend; otherwise it remains in static demo mode.
 
-The GitHub Actions workflow publishes only the `frontend/` directory and injects the configured backend URL during deployment. Its deployment fails with a clear error if `HOSPITAL_API_BASE_URL` is not set.
+The GitHub Actions workflow publishes only the `frontend/` directory and configures the backend URL during deployment.
 
 Anyone with the public link can view and change the same demo data. Use fictional data only; never enter real patient or other sensitive information. Keep the Render service to one running instance. Free hosting plans may sleep and take time to respond.
 

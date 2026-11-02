@@ -460,7 +460,8 @@ body {
 body.public-demo-readonly #admissions,
 body.public-demo-readonly .utility-panel,
 body.public-demo-readonly .hero-button,
-body.public-demo-readonly .patient-actions button {
+body.public-demo-readonly .patient-actions button,
+body.public-demo-readonly .appointment-actions button {
   display: none;
 }
 
