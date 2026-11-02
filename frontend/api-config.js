@@ -1,0 +1,1 @@
+window.HOSPITAL_API_BASE_URL = '';

@@ -11,6 +11,7 @@ const nowCalling = document.getElementById('nowCalling');
 const inventoryForm = document.getElementById('inventoryForm');
 const inventoryTypeSelect = inventoryForm.elements.type;
 const inventoryNameSelect = inventoryForm.elements.name;
+const apiBaseUrl = (window.HOSPITAL_API_BASE_URL || '').replace(/\/+$/, '');
 const inventoryItemsByType = { blood: [], medicine: [] };
 let currentDoctors = [];
 let dashboardLoadInProgress = false;
@@ -32,7 +33,7 @@ function showToast(message) {
 }
 
 async function fetchJson(url, options = {}) {
-  const response = await fetch(url, {
+  const response = await fetch(`${apiBaseUrl}${url}`, {
     headers: { 'Content-Type': 'application/json' },
     ...options
   });

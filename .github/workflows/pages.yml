@@ -1,0 +1,52 @@
+name: Deploy website to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Set API endpoint
+        env:
+          API_BASE_URL: ${{ vars.HOSPITAL_API_BASE_URL }}
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const apiBaseUrl = (process.env.API_BASE_URL || '').trim().replace(/\/+$/, '');
+          let parsedUrl;
+          try {
+            parsedUrl = new URL(apiBaseUrl);
+          } catch {
+            throw new Error('Set the HOSPITAL_API_BASE_URL repository variable to the HTTPS URL of the deployed backend.');
+          }
+          if (parsedUrl.protocol !== 'https:' || parsedUrl.pathname !== '/' || parsedUrl.search || parsedUrl.hash) {
+            throw new Error('HOSPITAL_API_BASE_URL must be an HTTPS origin without a path, query, or fragment.');
+          }
+          fs.writeFileSync('frontend/api-config.js', `window.HOSPITAL_API_BASE_URL = ${JSON.stringify(apiBaseUrl)};\n`);
+          NODE
+      - name: Upload website files
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend
+      - name: Deploy website
+        id: deployment
+        uses: actions/deploy-pages@v4
